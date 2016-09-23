@@ -1,0 +1,39 @@
+{% extends 'avs/base_visitor.html' %}
+{% block title %}Questions{% endblock %}
+
+
+{% block style %}
+ .arrange-horizontally > * {
+    display: inline-block;
+    text-align: center;
+}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  {% for i in list %}
+  <div class="panel-group">
+
+    <div class="panel panel-primary">
+        <a href = "{% url 'avs:QuestionSolve' Qid=i.0 %}">
+          <div class="panel-heading">{{ i.1 }}</div>
+        </a>
+      <div class="panel-body">
+        <div class = "arrange-horizontally">
+        <div>
+          <h4>Difficulty : {{ i.2 }}</h4>
+        </div>
+        <div>
+          <h4>Time Limit : {{ i.3 }}</h4>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>
+{% endblock %}

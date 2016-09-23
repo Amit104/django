@@ -1,0 +1,24 @@
+Problem Statement :
+
+Paul Labile Pogba is back in action! He has practiced enough for his upcoming fixture against Hull City. Bored, he stumbles across an interesting problem and asks your help to solve it! The problem reads as follows, 
+Given 3 positive integers A, N and K, consider the set S = {A, 2*A, 3*A, …, (N -1)*A, N*A). Find the number of pairs (X, Y) belonging to set S such that X + Y is divisible by K and X is not equal to Y. Note that X must occur before Y in the set.
+
+Input Format:
+The input contains 3 positive integers A, N and K.
+
+Output Format:
+Print a single integer denoting the answer.
+
+Constraints:
+1 <= A, N <= 10^9,
+1 <= K <= 10^6.
+
+Sample Input
+1 3 3
+
+Sample Output
+1
+
+
+Explanation:
+Possible pairs are (1,2), (2,3) and (1,3) out of which only (1,2) is the pair divisible by 3. Hence answer is 1.

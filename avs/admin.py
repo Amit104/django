@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile,Questions,CategoriesQ,Ins,Submission,Testcase
+from .models import UserProfile,CategoriesQ,Ins,Submission,Testcase, Questions
 # Register your models here.
 admin.site.register(UserProfile)
 admin.site.register(Questions)
