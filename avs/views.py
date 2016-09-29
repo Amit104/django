@@ -8,9 +8,6 @@ from django.db.models import Q
 from .forms import UserForm,UploadFileForm
 from .models import UserProfile, CategoriesQ , Ins, Questions
 from django.db import connection
-import cloudinary 
-import cloudinary.uploader
-import cloudinary.api
 import locale
 import os, filecmp
 

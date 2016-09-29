@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-import cloudinary 
-import cloudinary.uploader
-import cloudinary.api
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -133,9 +130,3 @@ STATIC_URL = '/static/'
 
 
 AUTH_PROFILE_MODULE = "avs.UserProfile"
-
-cloudinary.config(
-    cloud_name = "dzqkhpl3j",
-    api_key = "324268937822721",
-    api_secret = "RNU0K7J-e7sew24t5YYnkhrX71M"
-    )
