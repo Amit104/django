@@ -15,7 +15,7 @@
 
 </head>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
 
         <!-- Header -->
@@ -56,9 +56,8 @@
     </div>
 </nav>
 
-<div id="demo">
-  <h1><center>TOPIC NAME</center></h1>
-  <h2>Questions</h2>
+<div id="demo" style="margin-top:50px">
+  <h1><center>{{ Cname }}</center></h1>
   
   <div class="table-responsive-vertical shadow-z-1">
   <table id="table" class="table table-hover table-mc-gray table-striped">
@@ -71,30 +70,14 @@
         </tr>
       </thead>
       <tbody>
+        {% for x in list %}
         <tr>
-          <td data-title="Name"><a href="#">Pogback</a></td>
-          <td data-title="Difficulty">Easy</td>
-          <td data-title="Time Limit">2</td>
+          <td data-title="Name"><a href="{% url 'avs:QuestionSolve' Qid=x.0 %}">{{ x.1 }}</a></td>
+          <td data-title="Difficulty">{{ x.2 }}</td>
+          <td data-title="Time Limit">{{ x.3 }}</td>
           <td data-title="Status">Completed</td>
         </tr>
-        <tr>
-          <td data-title="Name"><a href="#">Pogback1</a></td>
-          <td data-title="Difficulty">Easy</td>
-          <td data-title="Time Limit">2</td>
-          <td data-title="Status">Completed</td>
-        </tr>
-        <tr>
-          <td data-title="Name"><a href="#">Pogback2</a></td>
-          <td data-title="Difficulty">Easy</td>
-          <td data-title="Time Limit">2</td>
-          <td data-title="Status">Completed</td>
-        </tr>
-        <tr>
-          <td data-title="Name"><a href="#">Pogback3</a></td>
-          <td data-title="Difficulty">Easy</td>
-          <td data-title="Time Limit">2</td>
-          <td data-title="Status">Completed</td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
