@@ -4,22 +4,61 @@
     <meta charset="UTF-8">
     <title>Fixed table header</title>
     {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src="{% static 'music/js/index.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'music/reset.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'music/scoreboard.css' %}"/>    
+    <link rel="stylesheet" type="text/css" href="{% static 'music/scoreboard.css' %}"/>  
+    <style>
+          body{
+              background:url('../static/music/images/pattern_bg.png');
+          }
+      </style>  
   </head>
 <body>
 
-    <section> <!--for demo wrap-->
-      <h1>Scoreboard</h1>  
+    <!-- navbar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+
+            <!-- Header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'avs:home' %}">AVS</a>
+            </div>
+
+            <!-- Items -->
+            <div class="collapse navbar-collapse" id="topNavBar">
+        
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{% url 'avs:scoreboard' %}">
+                            <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>&nbsp; Scoreboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'avs:logout_user' %}">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <section style = 'margin-top:80px'> <!--for demo wrap-->
+      <h1 style='font-weight:500'>Scoreboard</h1>  
       <div class="tbl-header">
       <table cellpadding="0" cellspacing="0" border="10">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Questions Solved</th>
-            <th>Total Score</th>
+            <th><span style="font-weight:600">Name</span></th>
+            <th><span style="font-weight:600">Questions Solved</span></th>
+            <th><span style="font-weight:600">Total Score</span>  </th>
           </tr>
         </thead>
       </table>
@@ -28,14 +67,14 @@
       <table cellpadding="0" cellspacing="0" border="10">
         <tbody>
           <tr>
-            <td>AAC</td>
-            <td>AUSTRALIAN COMPANY </td>
-            <td>$1.38</td>
+            <td>Amit</td>
+            <td>20 </td>
+            <td>300</td>
           </tr>
           <tr>
-            <td>AAD</td>
-            <td>AUSENCO</td>
-            <td>$2.38</td>
+            <td>Subbu</td>
+            <td>5000</td>
+            <td>60000</td>
           </tr>
         </tbody>
       </table>
