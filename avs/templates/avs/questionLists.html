@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AVS{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="questionList.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Da" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="questionList.js"></script>
+    <script>
+    $(document).ready(function(){
+      $(window).scroll(function() { 
+        if ($(document).scrollTop() > 600) { 
+          $(".navbar-fixed-top").css("background-color", "#000000"); 
+          $(".navbar-fixed-top").css("height", "50px"); 
+        } else {
+          $(".navbar-fixed-top").css("background-color", "transparent"); 
+        }
+      });
+    });
+    </script>
+</head>
+<div id="demo">
+  <h1><center>TOPIC NAME</center></h1>
+  <h2>Questions</h2>
+  
+  <div class="table-responsive-vertical shadow-z-1">
+  <table id="table" class="table table-hover table-mc-gray table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Difficulty</th>
+          <th>Time Limit</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-title="Name"><a href="#">Pogback</a></td>
+          <td data-title="Difficulty">Easy</td>
+          <td data-title="Time Limit">2</td>
+          <td data-title="Status">Completed</td>
+        </tr>
+        <tr>
+          <td data-title="Name"><a href="#">Pogback1</a></td>
+          <td data-title="Difficulty">Easy</td>
+          <td data-title="Time Limit">2</td>
+          <td data-title="Status">Completed</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+   
+  </div>
+  
+</div>
+{% endblock %}
+{% block body %}
+{% endblock %}
+</body>
+</html>
