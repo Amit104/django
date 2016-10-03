@@ -29,7 +29,7 @@ def home(request):
                 s = []
         if not ccx % 3 == 0:
             dic.append(s)
-        return render(request, 'avs/home.html', {"dic":dic})
+        return render(request, 'avs/home_new.html', {"dic":dic})
 
 def QuestionsList(request, Cid):
     category = get_object_or_404(CategoriesQ, pk=Cid)
