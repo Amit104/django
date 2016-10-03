@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Fixed table header</title>
+    {% load staticfiles %}
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="{% static 'music/js/index.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'music/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'music/scoreboard.css' %}"/>    
+  </head>
+<body>
+
+    <section> <!--for demo wrap-->
+      <h1>Scoreboard</h1>  
+      <div class="tbl-header">
+      <table cellpadding="0" cellspacing="0" border="10">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Questions Solved</th>
+            <th>Total Score</th>
+          </tr>
+        </thead>
+      </table>
+      </div>
+      <div  class="tbl-content">
+      <table cellpadding="0" cellspacing="0" border="10">
+        <tbody>
+          <tr>
+            <td>AAC</td>
+            <td>AUSTRALIAN COMPANY </td>
+            <td>$1.38</td>
+          </tr>
+          <tr>
+            <td>AAD</td>
+            <td>AUSENCO</td>
+            <td>$2.38</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </body>
+</html>

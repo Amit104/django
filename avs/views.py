@@ -42,6 +42,10 @@ def QuestionsList(request, Cid):
     X = cursor.fetchall()
     return render(request, 'avs/questionsList.html',{'list':X})
 
+def scoreboard(request):
+    return render(request, 'avs/scoreboard.html')
+
+
 def compile(request, Qid):
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
