@@ -1,34 +1,51 @@
-{% extends 'avs/base_visitor.html' %}
-{% block title %}Register{% endblock %}
-{% block nav %}<h1></h1>{% endblock %}
-{% block body %}
-<div class="container-fluid">
+<!DOCTYPE html>
+<html lang="en" class="ie_11_scroll">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="hhhwidth=device-width, initial-scale=1">
+        <title>Register</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'music/css/font-awesome.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'music/css/templatemo_style.css' %}"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
+        <style>
+            body{
+                background:url('../static/music/images/pattern_bg.png');
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
 
-    <div class="row" style="margin-top: 120px; margin-left: 350px; width: 1200px">
-        <div class="col-sm-12 col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-body" style="margin-left: 50px; width: 800px">
-                    <h3>Register for an Account</h3>
-                    {% if error_message %}
-                        <p><strong>{{ error_message }}</strong></p>
-                    {% endif %}
-                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {% include 'avs/form_template.html' %}
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
+            <div class="row" style="margin-top: 120px; margin-left: 400px; width: 2600px margin-bottom:300px">
+                <div class="col-sm-12 col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="width: 600px">
+                            <h3>Register for an Account</h3>
+                            {% if error_message %}
+                                <p><strong>{{ error_message }}</strong></p>
+                            {% endif %}
+                            <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% include 'avs/form_template.html' %}
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-                <div class="panel-footer">
-                    Already have an account? <a href="{% url 'avs:login_user' %}">Click here</a> to log in.
+                        <div class="panel-footer">
+                            Already have an account? <a href="{% url 'avs:login_user' %}">Click here</a> to log in.
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div>
-
-</div>
-
-{% endblock %}
+        <script src="{% static 'music/js/templatemo_scripts.js' %}"></script>
+    </body>
+</html>
