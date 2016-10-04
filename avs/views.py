@@ -77,8 +77,11 @@ def compile(request, Qid):
         c = codes[compile1(file,'cpp')]
         r = codes[run('sub',testin,timeout,lang)]
         m.append(match(testout))
-
-    return render(request, 'avs/compile.html',{'verdict':m})
+    x = True
+    for i in m:
+        if m is False:
+            x = True
+    return render(request, 'avs/compile.html',{'verdict':m , 'answer':x})
 
 
 
