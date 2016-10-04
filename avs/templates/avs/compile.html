@@ -51,25 +51,25 @@
 
 		<!-- Verdict -->
 		<div id="demo" style="margin-top:50px">
-		<h1>Verdict</h1>
+		<h1 style="color: white"><center>VERDICT</center></h1>
 		  <div class="table-responsive-vertical shadow-z-1">
 		  <table id="table" class="table table-hover table-mc-gray table-striped">
 		      <thead>
 		        <tr style='background:#2c4a7a'>
-		          <th>TestCase</th>
-		          <th>Time Taken</th>
-		          <th>Status</th>
+		          <th style="color: white">TestCase</th>
+		          <th style="color: white">Time Taken</th>
+		          <th style="color: white">Status</th>
 		        </tr>
 		      </thead>
 		      <tbody>
 		        {% for x in verdict %}
 		        {% if x is True %}
-		        <tr style='background:#50DE50'>
+		        <tr style='background:#CFF4B9'>
 		          <td data-title="Test Case">TestCase {{ forloop.counter }}</td>
 		          <td data-title="Time Taken">0.2sec</td>
 		          <td data-title="Status"><i class="fa fa-check" style='color:green'></i></td>
 		        {% else %}
-		        <tr style='background:#e03e4e'>	
+		        <tr style='background:#F4B9B9'>
 		          <td data-title="Test Case">TestCase {{ forloop.counter }}</td>
 		          <td data-title="Time Taken">0.2sec</td>
 		          <td data-title="Status"><i class="fa fa-close" style='color:red'></i></td>
