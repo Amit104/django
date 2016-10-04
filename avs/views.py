@@ -72,7 +72,7 @@ def compile(request, Qid):
         lang = 'cpp'
         testin = 'Testcase0.txt'
         testout = 'TestcaseOut0.txt'
-        timeout = '100' # secs
+        timeout = '2' # secs
 
         c = codes[compile1(file,'cpp')]
         r = codes[run('sub',testin,timeout,lang)]

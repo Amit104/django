@@ -66,7 +66,7 @@
   <div class="table-responsive-vertical shadow-z-1">
   <table id="table" class="table table-hover table-mc-gray table-striped">
       <thead>
-        <tr color: blue>
+        <tr>
           <th>Name</th>
           <th>Difficulty</th>
           <th>Time Limit</th>
@@ -76,10 +76,10 @@
       <tbody>
         {% for x in list %}
         <tr>
-          <td data-title="Name" class="Blue"><a href="{% url 'avs:QuestionSolve' Qid=x.0 %}">{{ x.1 }}</a></td>
-          <td data-title="Difficulty" class="Blue">{{ x.2 }}</td>
-          <td data-title="Time Limit">{{ x.3 }}</td>
-          <td data-title="Status">Completed</td>
+          <td data-title="Name" style='color:darkblue'><a href="{% url 'avs:QuestionSolve' Qid=x.0 %}">{{ x.1 }}</a></td>
+          <td data-title="Difficulty" style='color:blue'>{{ x.2 }}</td>
+          <td data-title="Time Limit" style='color:blue'>{{ x.3 }}</td>
+          <td data-title="Status" style='color:green'>Completed</td>
         </tr>
         {% endfor %}
       </tbody>
