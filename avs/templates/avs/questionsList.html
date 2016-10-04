@@ -2,6 +2,7 @@
 <head>
 <meta charset="UTF-8">
 {% load staticfiles %}
+<title>Questions</title>
 <link rel="stylesheet" type="text/css" href="{% static 'music/questionList.css' %}"/>
 <script src="{% static 'music/js/questionList.js' %}"></script>
 <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
@@ -37,12 +38,6 @@
 
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
-            <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'avs:home' %}">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="q" value="{{ request.GET.q }}">
-                </div>
-                <button type="submit" class="btn btn-default">Search</button>
-            </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="{% url 'avs:scoreboard' %}">
