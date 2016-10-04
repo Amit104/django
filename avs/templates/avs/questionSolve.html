@@ -1,17 +1,146 @@
-{% extends 'avs/base_visitor.html' %}
-{% block title %}Solve{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solve</title>
+    {% load staticfiles %}
+    <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'music/css/font-awesome.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'music/css/templatemo_style.css' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{% static 'music/js/main.js' %}"></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="{% static 'music/js/index.js' %}"></script>
+</head>
+<style>
+div.container {
+    border: 3px solid black;
+    margin-top: 75px;
 
-{% block body %}
-<p>{{ stat }}</p>
+}
+
+body {
+    background:url('../static/music/images/pattern_bg.png');
+
+    }
+
+@page { margin: 20mm }
+		p { margin-bottom: 2.47mm; line-height: 120% }
+		a:link { so-language: zxx }
+</style>
+<body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+		    <div class="container-fluid">
+
+		        <!-- Header -->
+		        <div class="navbar-header">
+		            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		            </button>
+		            <a class="navbar-brand" href="{% url 'avs:home' %}">AVS</a>
+		        </div>
+
+		        <!-- Items -->
+		        <div class="collapse navbar-collapse" id="topNavBar">
+		            <ul class="nav navbar-nav">
+		                <li class="{% block songs_active %}{% endblock %}"><a href="#templatemo_features" class="scroll_effect"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span>&nbsp; Category</a></li>
+		            </ul>
+
+		            <ul class="nav navbar-nav navbar-right">
+		                <li>
+		                    <a href="{% url 'avs:scoreboard' %}">
+		                        <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>&nbsp; Scoreboard
+		                    </a>
+		                </li>
+		                <li>
+		                    <a href="{% url 'avs:logout_user' %}">
+		                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+		                    </a>
+		                </li>
+		            </ul>
+		        </div>
+
+		    </div>
+		</nav>
+
+<div class="container">
+    <p style="margin-top: 10mm; margin-bottom: 0mm; line-height: 100%"><b>PROBLEM STATEMENT :
+</b></p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">Paul Labile Pogba is
+back in action! He has practiced enough for his upcoming fixture
+against Hull City. Bored, he stumbles across an interesting problem
+and asks your help to solve it! The problem reads as follows,
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">Given 3 positive
+integers A, N and K, consider the set S = {A, 2*A, 3*A, …, (N
+-1)*A, N*A). Find the number of pairs (X, Y) belonging to set S such
+that X + Y is divisible by K and X is not equal to Y. Note that X
+must occur before Y in the set.
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Input Format:</b>
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">The input contains 3
+positive integers A, N and K.
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Output Format:</b>
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">Print a single
+integer denoting the answer.
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Constraints:</b>
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">1 &lt;= A, N &lt;=
+10^9,
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">1 &lt;= K &lt;=
+10^6.
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Sample Input</b>
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">1 3 3
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Sample Output</b>
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">1
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%">
+</p>
+<p style="margin-bottom: 0mm; line-height: 100%"><b>Explanation:</b>
+</p>
+<p style="margin-bottom: 10mm; line-height: 100%">Possible pairs are
+(1,2), (2,3) and (1,3) out of which only (1,2) is the pair divisible
+by 3. Hence answer is 1.</p>
+</div>
 <div>
 	<form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include 'avs/form_template.html' %}
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </form>
 </div>
-{% endblock %}
+</body>
+</html>
+
