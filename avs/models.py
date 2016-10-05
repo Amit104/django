@@ -22,6 +22,9 @@ class Questions(models.Model):
 	Memory_limit = models.IntegerField()
 	Time_limit = models.IntegerField()
 
+	def __str__(self):
+		return self.Name
+
 
 class Testcase(models.Model):
 	inputTestFile = models.FileField()
@@ -35,7 +38,7 @@ class Submission(models.Model):
 	score = models.CharField(max_length=25, blank=True)
 	Qid = models.ForeignKey(Questions)
 	Uid = models.ForeignKey(UserProfile)
-	
+
 class Ins(models.Model):
 	questions = models.ForeignKey(Questions)
 	category = models.ForeignKey(CategoriesQ)
