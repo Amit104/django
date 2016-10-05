@@ -37,7 +37,7 @@ def QuestionsList(request, Cid):
     c = category.Cid
     n = category.Name
     cursor.execute("Select avs_Questions.id as ID,avs_Questions.Name as NAM,avs_Questions.Difficulty as DIFF, \
-        avs_Questions.Time_Limit as TL from avs_Questions,avs_Ins,avs_CategoriesQ \
+        avs_Questions.Time_Limit as TL, avs_Questions.Memory_Limit as ML from avs_Questions,avs_Ins,avs_CategoriesQ \
         where avs_CategoriesQ.Cid= avs_Ins.category_id and \
         avs_Questions.id=avs_Ins.questions_id and avs_CategoriesQ.Cid=%s",[c])
     X = cursor.fetchall()
