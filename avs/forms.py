@@ -10,5 +10,6 @@ class UserForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
 	Code = forms.FileField()
+	Language = forms.CharField(max_length=12)
 
 

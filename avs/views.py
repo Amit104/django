@@ -47,17 +47,20 @@ def scoreboard(request):
     return render(request, 'avs/scoreboard.html')
 
 
-def compile(request, Qid):
+def compile(request, Qid,lan):
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
     c = question.id
-    cursor.execute("Select inputTestFile,outputTestFile \
+    cursor.execute("Select inputTestFile,outputTestFile,Time_Limit \
      from avs_questions,avs_testcase where avs_questions.id=%s",[c])
     X = cursor.fetchall()
     m = []
+    TimeL = 0
     for i in X:
         inp = i[0]
         out = i[1]
+        tl = i[2]
+        TimeL = tl
         with open(inp,'r',encoding=locale.getpreferredencoding()) as a_file:
             a_content = a_file.read()
             with open('Testcase0.txt','w',encoding=locale.getpreferredencoding()) as b_file:
@@ -68,19 +71,31 @@ def compile(request, Qid):
             with open('TestcaseOut0.txt','w',encoding=locale.getpreferredencoding()) as b_file:
                 b_file.write(a_content) 
 
-        file = 'sub.cpp'
-        lang = 'cpp'
+        file = 'sub.'+lan
+        lang = lan
         testin = 'Testcase0.txt'
         testout = 'TestcaseOut0.txt'
-        timeout = '2' # secs
+        timeout = str(tl) # secs
 
-        c = codes[compile1(file,'cpp')]
+        c = codes[compile1(file,lan)]
         r = codes[run('sub',testin,timeout,lang)]
         m.append(match(testout))
     x = True
     for i in m:
         if m is False:
             x = False
+    fil = "sub."+lan
+
+    s = 0
+    if x is True:
+        s = 100
+
+    cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code) \
+        values (%s,0.2,%s,%s,%s,%s,%s)",([TimeL],[lan],[s],[Qid],[request.user.id],[fil]))
+    cursor.execute("Select score from avs_userprofile where id = %s",[request.user.id])
+    e = cursor.fetchall()
+    d = str(int(s) + int(e[0][0]))
+    cursor.execute("update avs_userprofile set score = %s where id = %s",([d],[request.user.id]))
     return render(request, 'avs/compile.html',{'verdict':m , 'answer':x})
 
 
@@ -90,24 +105,27 @@ def QuestionSolve(request, Qid):
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
     c = question.id
-    cursor.execute("Select avs_Questions.Name,avs_Questions.Statement \
-    from avs_Questions where avs_Questions.id=%s",[c])
+    cursor.execute("Select avs_Questions.Name,avs_Questions.ProblemStatement, \
+    avs_Questions.InputFormat,avs_Questions.OutputFormat,avs_Questions.Constraints,\
+    avs_Questions.SampleInput,avs_Questions.SampleOutput,avs_Questions.Memory_limit, \
+    avs_Questions.Time_limit from avs_Questions where avs_Questions.id=%s",[c])
     X = cursor.fetchall()
-    t = X[0][1]
-    f = open(t)
-    stat = f.read()
-    f.close()
+    # t = X[0][1]
+    # f = open(t)
+    # stat = f.read()
+    # f.close()
     if request.method == 'POST':
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
-            handle_uploaded_file(request.FILES['Code'])
-            return HttpResponseRedirect(str('/compile/'+Qid))
+            lan = form.cleaned_data['Language']
+            handle_uploaded_file(request.FILES['Code'],lan)
+            return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/')
     else:
         form = UploadFileForm()
-    return render(request, 'avs/questionSolve.html',{'list':X,'stat':stat,'form':form})
+    return render(request, 'avs/questionSolve.html',{'list':X,'form':form})
 
-def handle_uploaded_file(f):
-    with open('sub.cpp','wb+') as destination:
+def handle_uploaded_file(f,lan):
+    with open('sub.'+lan,'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
 
