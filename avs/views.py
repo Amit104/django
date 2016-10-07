@@ -44,7 +44,10 @@ def QuestionsList(request, Cid):
     return render(request, 'avs/questionsList.html',{'list':X, 'Cname':n})
 
 def scoreboard(request):
-    return render(request, 'avs/scoreboard.html')
+    cursor = connection.cursor()
+    cursor.execute("Select username as Name, score / 100 as QuestionsSolved, score as Score from avs_userprofile, auth_user where avs_userprofile.id = auth_user.id")
+    X =cursor.fetchall()
+    return render(request, 'avs/scoreboard.html', {'x': X})
 
 
 def compile(request, Qid):
