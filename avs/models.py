@@ -16,8 +16,13 @@ class CategoriesQ(models.Model):
 		return self.Name
 
 class Questions(models.Model):
-	Name = models.CharField(max_length=25)
-	Statement = models.FileField()
+	Name = models.CharField(max_length=50)
+	ProblemStatement = models.CharField(max_length=3500)
+	InputFormat = models.CharField(max_length=250)
+	OutputFormat = models.CharField(max_length=250)
+	Constraints = models.CharField(max_length=250)
+	SampleInput = models.CharField(max_length=50)
+	SampleOutput = models.CharField(max_length=50)
 	Difficulty = models.CharField(max_length=10)
 	Memory_limit = models.IntegerField()
 	Time_limit = models.IntegerField()
@@ -38,6 +43,7 @@ class Submission(models.Model):
 	score = models.CharField(max_length=25, blank=True)
 	Qid = models.ForeignKey(Questions)
 	Uid = models.ForeignKey(UserProfile)
+	Code = models.FileField()
 
 class Ins(models.Model):
 	questions = models.ForeignKey(Questions)
