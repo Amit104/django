@@ -67,21 +67,13 @@
       <div  class="tbl-content">
       <table cellpadding="0" cellspacing="0" border="10">
         <tbody>
+        {% for y in x %}
           <tr>
-            <td>Vaibhavi</td>
-            <td>10 </td>
-            <td>200</td>
+            <td>{{ y.0 }}</td>
+            <td>{{ y.1 }}</td>
+            <td>{{ y.2 }}</td>
           </tr>
-          <tr>
-            <td>Amit</td>
-            <td>20 </td>
-            <td>300</td>
-          </tr>
-          <tr>
-            <td>Subbu</td>
-            <td>5000</td>
-            <td>60000</td>
-          </tr>
+        {% endfor %}
         </tbody>
       </table>
       </div>
