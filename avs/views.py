@@ -98,8 +98,13 @@ def compile(request, Qid,lan):
     cursor.execute("Select score from avs_userprofile where id = %s",[request.user.id])
     e = cursor.fetchall()
     d = str(int(s) + int(e[0][0]))
-    cursor.execute("update avs_userprofile set score = %s where id = %s",([d],[request.user.id]))
-    return render(request, 'avs/compile.html',{'verdict':m , 'answer':x})
+    cursor.execute("select count(*) from avs_solved where questions_id = %s and users_id = %s",([Qid],[request.user.id]))
+    count = cursor.fetchall()[0]
+    if count[0]==0 and x is True:
+        cursor.execute("update avs_userprofile set score = %s where id = %s",([d],[request.user.id]))
+        cursor.execute("insert into avs_solved (questions_id,users_id)\
+         values (%s,%s)",([Qid],[request.user.id]))
+    return render(request, 'avs/compile.html',{'verdict':m , 'answer':x,'count':count})
 
 
 

@@ -30,6 +30,10 @@ class Questions(models.Model):
 	def __str__(self):
 		return self.Name
 
+class solved(models.Model):
+	questions = models.ForeignKey(Questions)
+	users = models.ForeignKey(UserProfile)
+
 
 class Testcase(models.Model):
 	inputTestFile = models.FileField()
