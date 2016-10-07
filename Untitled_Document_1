@@ -1,7 +1,0 @@
-class CategoriesQ(models.Model):
-	Name = models.CharField(max_length=255)
-	Noq = models.IntegerField(default = 0)
-	Cid = models.AutoField(primary_key=True,default = 1)
-class Ins(models.Model):
-	questions = models.ForeignKey(Questions)
-	category = models.ForeignKey(CategoriesQ)

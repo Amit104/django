@@ -80,7 +80,7 @@ def compile(request, Qid):
     x = True
     for i in m:
         if m is False:
-            x = True
+            x = False
     return render(request, 'avs/compile.html',{'verdict':m , 'answer':x})
 
 
