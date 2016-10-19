@@ -10,9 +10,10 @@ from .models import UserProfile, CategoriesQ , Ins, Questions
 from django.db import connection
 import locale
 import os, filecmp
+import datetime
 
 # Create your views here.
-codes = {200:'success',404:'file not found',400:'error',408:'timeout'}
+codes = {200:'success',404:'file not found',400:'Compilation Error',408:'Timeout',1:"Accepted",0:"Wrong Answer"}
 
 def home(request):
     if not request.user.is_authenticated():
@@ -50,7 +51,7 @@ def scoreboard(request):
     return render(request, 'avs/scoreboard.html', {'x': X})
 
 
-def compile(request, Qid,lan):
+def compile(request, Qid,lan,fname):
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
     c = question.id
@@ -59,6 +60,9 @@ def compile(request, Qid,lan):
     X = cursor.fetchall()
     m = []
     TimeL = 0
+    compilerError = False
+    runTimeError = False
+    fnf = False
     for i in X:
         inp = i[0]
         out = i[1]
@@ -80,21 +84,42 @@ def compile(request, Qid,lan):
         testout = 'TestcaseOut0.txt'
         timeout = str(tl) # secs
 
-        c = codes[compile1(file,lan)]
-        r = codes[run('sub',testin,timeout,lang)]
-        m.append(match(testout))
-    x = True
-    for i in m:
-        if m is False:
-            x = False
-    fil = "sub."+lan
+        c = compile1(file,lan)
+        if c == 400:
+            compilerError = True
+        if c == 404:
+            fof = True
+        if c ==200:
+            tin = datetime.datetime.now()
+            r = run('sub',testin,timeout,lang)
+            tout = datetime.datetime.now()
+            tt = str(tout-tin)
+            if r == 408:
+                runTimeError = True
+            if r == 404:
+                fof = True
 
+            m.append([match(testout),tt])
+
+    x = 1
+    for i in m:
+        if i is False:
+            x = 0
+
+    if compilerError:
+        x = 400
+    if runTimeError:
+        x = 408
+    if fnf:
+        x = 404
+
+    fil = "sub."+lan
     s = 0
-    if x is True:
+    if x == 1:
         s = 100
 
     cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code) \
-        values (%s,0.2,%s,%s,%s,%s,%s)",([TimeL],[lan],[s],[Qid],[request.user.id],[fil]))
+        values (%s,0.2,%s,%s,%s,%s,%s)",([TimeL],[lan],[s],[Qid],[request.user.id],[fname]))
     cursor.execute("Select score from avs_userprofile where id = %s",[request.user.id])
     e = cursor.fetchall()
     d = str(int(s) + int(e[0][0]))
@@ -104,10 +129,7 @@ def compile(request, Qid,lan):
         cursor.execute("update avs_userprofile set score = %s where id = %s",([d],[request.user.id]))
         cursor.execute("insert into avs_solved (questions_id,users_id)\
          values (%s,%s)",([Qid],[request.user.id]))
-    return render(request, 'avs/compile.html',{'verdict':m , 'answer':x,'count':count})
-
-
-
+    return render(request, 'avs/compile.html',{'verdict':m , 'answer':codes[x]})
 
 def QuestionSolve(request, Qid):
     question = get_object_or_404(Questions, pk=Qid)
@@ -126,16 +148,21 @@ def QuestionSolve(request, Qid):
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
             lan = form.cleaned_data['Language']
-            handle_uploaded_file(request.FILES['Code'],lan)
-            return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/')
+            fname = handle_uploaded_file(request.FILES['Code'],lan,request.user.id)
+            return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/' + fname +'/')
     else:
         form = UploadFileForm()
     return render(request, 'avs/questionSolve.html',{'list':X,'form':form})
 
-def handle_uploaded_file(f,lan):
+def handle_uploaded_file(f,lan,userid):
     with open('sub.'+lan,'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+    fname = str(userid) + ''.join(e for e in str(datetime.datetime.now()) if e.isalnum())
+    with open(fname+'.'+lan,'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk) 
+    return fname
 
 def login_user(request):
     if request.method == "POST":

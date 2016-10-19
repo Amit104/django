@@ -22,5 +22,4 @@ int main()
 
     printf("%lld\n", r);
     return 0;
-    
 }
