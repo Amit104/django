@@ -68,13 +68,28 @@ body {
 		    </div>
 		</nav>
 
-		<div class = "container">
-			{% for x in list %}
-			{% for i in x %}
-				<h4>{{ i }}</h4>
+		{% for x in list %}
+			<br>
+			<h2><center>{{ x.0 }}</center></h2>
+
+			<div class = "container">
+
+				<h3> Problem Statement: </h3>
+				<h4>{{ x.1 }}</h4>
+				<h3> Input Format: </h3>
+				<h4>{{ x.2 }}</h4>
+				<h3> Output Format: </h3>
+				<h4>{{ x.3 }}</h4>
+				<h3> Constraints: </h3>
+				<h4>{{ x.4 }}</h4>
+				<h3> Sample Input: </h3>
+				<h4>{{ x.5 }}</h4>
+				<h3> Sample Output: </h3>
+				<h4>{{ x.6 }}</h4>
+
+			</div>
 			{% endfor %}
-			{% endfor %}
-		</div>
+
 
 		<div>
 			<form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">

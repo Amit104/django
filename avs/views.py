@@ -81,7 +81,12 @@ def QuestionsList(request, Cid):
         where avs_CategoriesQ.Cid= avs_Ins.category_id and \
         avs_Questions.id=avs_Ins.questions_id and avs_CategoriesQ.Cid=%s",[c])
     X = cursor.fetchall()
-    return render(request, 'avs/questionsList.html',{'list':X, 'Cname':n})
+    cursor.execute("Select questions_id as ID from avs_solved")
+    Y=cursor.fetchall()
+    ids=[]
+    for i in Y:
+        ids.append(i[0])
+    return render(request, 'avs/questionsList.html',{'list':X, 'Cname':n, 'solved': ids})
 
 def scoreboard(request):
     cursor = connection.cursor()
