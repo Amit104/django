@@ -11,6 +11,7 @@ from django.db import connection
 import locale
 import os, filecmp
 import datetime
+import mimetypes
 
 # Create your views here.
 codes = {200:'success',404:'file not found',400:'Compilation Error',408:'Timeout',1:"Accepted",0:"Wrong Answer"}
@@ -32,6 +33,44 @@ def home(request):
             dic.append(s)
         return render(request, 'avs/home_new.html', {"dic":dic})
 
+
+def xsendfile(request, file_path, original_filename):
+    fp = open(file_path, 'rb')
+    response = HttpResponse(fp.read())
+    fp.close()
+    type, encoding = mimetypes.guess_type(original_filename)
+    if type is None:
+        type = 'application/octet-stream'
+    response['Content-Type'] = type
+    response['Content-Length'] = str(os.stat(file_path).st_size)
+    if encoding is not None:
+        response['Content-Encoding'] = encoding
+
+    # To inspect details for the below code, see http://greenbytes.de/tech/tc2231/
+    if u'WebKit' in request.META['HTTP_USER_AGENT']:
+        # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
+        filename_header = 'filename=%s' % original_filename.encode('utf-8')
+    elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+        # IE does not support internationalized filename at all.
+        # It can only recognize internationalized URL, so we do the trick via routing rules.
+        filename_header = ''
+    else:
+        # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
+        #filename_header = 'filename*=UTF-8\'\'%s' % urllib.quote(original_filename.encode('utf-8'))
+        filename_header = ''
+    response['Content-Disposition'] = 'attachment; ' + filename_header
+    return response
+
+def submissions(request):
+    cursor = connection.cursor()
+    cursor.execute("Select avs_Questions.Name,avs_submission.language,avs_submission.time_taken,\
+        avs_submission.score,avs_submission.Code from avs_Questions,avs_submission where\
+        avs_submission.Qid_id=avs_Questions.id and avs_submission.Uid_id=%s",[request.user.id])
+    X =cursor.fetchall()
+    return render(request, 'avs/submissions.html', {'x': X})
+
+
+
 def QuestionsList(request, Cid):
     category = get_object_or_404(CategoriesQ, pk=Cid)
     cursor = connection.cursor()
@@ -46,7 +85,8 @@ def QuestionsList(request, Cid):
 
 def scoreboard(request):
     cursor = connection.cursor()
-    cursor.execute("Select username as Name, score / 100 as QuestionsSolved, score as Score from avs_userprofile, auth_user where avs_userprofile.id = auth_user.id")
+    cursor.execute("Select username as Name, score / 100 as QuestionsSolved, score as Score\
+     from avs_userprofile, auth_user where avs_userprofile.id = auth_user.id")
     X =cursor.fetchall()
     return render(request, 'avs/scoreboard.html', {'x': X})
 
@@ -103,7 +143,7 @@ def compile(request, Qid,lan,fname):
 
     x = 1
     for i in m:
-        if i is False:
+        if i[0] is False:
             x = 0
 
     if compilerError:
@@ -162,7 +202,7 @@ def handle_uploaded_file(f,lan,userid):
     with open(fname+'.'+lan,'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk) 
-    return fname
+    return fname+'.'+lan
 
 def login_user(request):
     if request.method == "POST":
