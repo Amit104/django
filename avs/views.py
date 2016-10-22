@@ -64,7 +64,7 @@ def xsendfile(request, file_path, original_filename):
 def submissions(request):
     cursor = connection.cursor()
     cursor.execute("Select avs_Questions.Name,avs_submission.language,avs_submission.time_taken,\
-        avs_submission.score,avs_submission.Code from avs_Questions,avs_submission where\
+        avs_submission.score,avs_submission.Code,avs_submission.verdict from avs_Questions,avs_submission where\
         avs_submission.Qid_id=avs_Questions.id and avs_submission.Uid_id=%s",[request.user.id])
     X =cursor.fetchall()
     return render(request, 'avs/submissions.html', {'x': X})
@@ -103,6 +103,7 @@ def compile(request, Qid,lan,fname):
     compilerError = False
     runTimeError = False
     fnf = False
+    maxtt = 0
     for i in X:
         inp = i[0]
         out = i[1]
@@ -131,9 +132,12 @@ def compile(request, Qid,lan,fname):
             fof = True
         if c ==200:
             tin = datetime.datetime.now()
-            r = run('sub',testin,timeout,lang)
+            r = run('sub',testin,timeout,lang)  
             tout = datetime.datetime.now()
-            tt = str(tout-tin)
+            tt = (tout-tin)
+            if maxtt < float(tt.total_seconds()):
+                maxtt = float(tt.total_seconds())
+            tt = str(tt)
             if r == 408:
                 runTimeError = True
             if r == 404:
@@ -157,9 +161,10 @@ def compile(request, Qid,lan,fname):
     s = 0
     if x == 1:
         s = 100
-
-    cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code) \
-        values (%s,0.2,%s,%s,%s,%s,%s)",([TimeL],[lan],[s],[Qid],[request.user.id],[fname]))
+    maxtt = str(maxtt)
+    v = str(x) 
+    cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code,verdict) \
+        values (%s,%s,%s,%s,%s,%s,%s,%s)",([maxtt],[TimeL],[lan],[s],[Qid],[request.user.id],[fname],[v]))
     cursor.execute("Select score from avs_userprofile where id = %s",[request.user.id])
     e = cursor.fetchall()
     d = str(int(s) + int(e[0][0]))

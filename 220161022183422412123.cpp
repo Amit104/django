@@ -21,7 +21,6 @@ int main()
     r >>= 1LL;
 
     printf("%lld\n", r);
-    while(1){}
     return 0;
     
 }

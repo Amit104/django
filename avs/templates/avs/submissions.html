@@ -9,6 +9,7 @@
     <script src="{% static 'music/js/index.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'music/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'music/scoreboard.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'music/css/font-awesome.min.css' %}"/>
     <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
     <style>
           body{
@@ -74,7 +75,18 @@
             <td>{{ y.0 }}</td>
             <td>{{ y.1 }}</td>
             <td>{{ y.2 }}</td>
-            <td>{{ y.3 }}</td>
+            {% ifequal y.5 "1" %}
+            <td><i class="fa fa-check" style='color:green'></i>&nbsp;{{ y.3 }}</td>
+            {% endifequal %}  
+            {% ifequal y.5 "0" %}
+            <td><i class="fa fa-close" style='color:red'></i>&nbsp;{{ y.3 }}</td>
+            {% endifequal %}
+            {% ifequal y.5 "400" %}
+            <td><i class="fa fa-exclamation-triangle" style='color:red'></i>&nbsp;{{ y.3 }}</td>
+            {% endifequal %} 
+            {% ifequal y.5 "408" %}
+            <td><i class="fa fa-clock-o" style='color:yellow'></i>&nbsp;{{ y.3 }}</td>
+            {% endifequal %}   
             <td><a href="/media/{{ y.4 }}/{{ y.4 }}"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></td>
           </tr>
         {% endfor %}
