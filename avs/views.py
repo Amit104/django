@@ -81,7 +81,7 @@ def QuestionsList(request, Cid):
         where avs_CategoriesQ.Cid= avs_Ins.category_id and \
         avs_Questions.id=avs_Ins.questions_id and avs_CategoriesQ.Cid=%s",[c])
     X = cursor.fetchall()
-    cursor.execute("Select questions_id as ID from avs_solved")
+    cursor.execute("Select questions_id as ID from avs_solved where users_id=%s",[request.user.id])
     Y=cursor.fetchall()
     ids=[]
     for i in Y:
