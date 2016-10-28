@@ -10,10 +10,11 @@ from .models import UserProfile, CategoriesQ , Ins, Questions
 from django.db import connection
 import locale
 import os, filecmp
-from django import forms
+import datetime
+import mimetypes
 
 # Create your views here.
-codes = {200:'success',404:'file not found',400:'error',408:'timeout'}
+codes = {200:'success',404:'file not found',400:'Compilation Error',408:'Timeout',1:"Accepted",0:"Wrong Answer"}
 
 def home(request):
     if not request.user.is_authenticated():
@@ -32,6 +33,44 @@ def home(request):
             dic.append(s)
         return render(request, 'avs/home_new.html', {"dic":dic})
 
+
+def xsendfile(request, file_path, original_filename):
+    fp = open(file_path, 'rb')
+    response = HttpResponse(fp.read())
+    fp.close()
+    type, encoding = mimetypes.guess_type(original_filename)
+    if type is None:
+        type = 'application/octet-stream'
+    response['Content-Type'] = type
+    response['Content-Length'] = str(os.stat(file_path).st_size)
+    if encoding is not None:
+        response['Content-Encoding'] = encoding
+
+    # To inspect details for the below code, see http://greenbytes.de/tech/tc2231/
+    if u'WebKit' in request.META['HTTP_USER_AGENT']:
+        # Safari 3.0 and Chrome 2.0 accepts UTF-8 encoded string directly.
+        filename_header = 'filename=%s' % original_filename.encode('utf-8')
+    elif u'MSIE' in request.META['HTTP_USER_AGENT']:
+        # IE does not support internationalized filename at all.
+        # It can only recognize internationalized URL, so we do the trick via routing rules.
+        filename_header = ''
+    else:
+        # For others like Firefox, we follow RFC2231 (encoding extension in HTTP headers).
+        #filename_header = 'filename*=UTF-8\'\'%s' % urllib.quote(original_filename.encode('utf-8'))
+        filename_header = ''
+    response['Content-Disposition'] = 'attachment; ' + filename_header
+    return response
+
+def submissions(request):
+    cursor = connection.cursor()
+    cursor.execute("Select avs_Questions.Name,avs_submission.language,avs_submission.time_taken,\
+        avs_submission.score,avs_submission.Code,avs_submission.verdict from avs_Questions,avs_submission where\
+        avs_submission.Qid_id=avs_Questions.id and avs_submission.Uid_id=%s",[request.user.id])
+    X =cursor.fetchall()
+    return render(request, 'avs/submissions.html', {'x': X})
+
+
+
 def QuestionsList(request, Cid):
     category = get_object_or_404(CategoriesQ, pk=Cid)
     cursor = connection.cursor()
@@ -42,17 +81,22 @@ def QuestionsList(request, Cid):
         where avs_CategoriesQ.Cid= avs_Ins.category_id and \
         avs_Questions.id=avs_Ins.questions_id and avs_CategoriesQ.Cid=%s",[c])
     X = cursor.fetchall()
-    return render(request, 'avs/questionsList.html',{'list':X, 'Cname':n})
+    cursor.execute("Select questions_id as ID from avs_solved where users_id=%s",[request.user.id])
+    Y=cursor.fetchall()
+    ids=[]
+    for i in Y:
+        ids.append(i[0])
+    return render(request, 'avs/questionsList.html',{'list':X, 'Cname':n, 'solved': ids})
 
 def scoreboard(request):
     cursor = connection.cursor()
-    cursor.execute("Select username as Name, score / 100 as QuestionsSolved, score as Score from avs_userprofile, auth_user where avs_userprofile.id = auth_user.id")
+    cursor.execute("Select username as Name, score / 100 as QuestionsSolved, score as Score\
+     from avs_userprofile, auth_user where avs_userprofile.id = auth_user.id")
     X =cursor.fetchall()
     return render(request, 'avs/scoreboard.html', {'x': X})
 
 
-def compile(request, Qid, lan):
-
+def compile(request, Qid,lan,fname):
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
     c = question.id
@@ -61,6 +105,10 @@ def compile(request, Qid, lan):
     X = cursor.fetchall()
     m = []
     TimeL = 0
+    compilerError = False
+    runTimeError = False
+    fnf = False
+    maxtt = 0
     for i in X:
         inp = i[0]
         out = i[1]
@@ -82,21 +130,46 @@ def compile(request, Qid, lan):
         testout = 'TestcaseOut0.txt'
         timeout = str(tl) # secs
 
-        c = codes[compile1(file,lan)]
-        r = codes[run('sub',testin,timeout,lang)]
-        m.append(match(testout))
-    x = True
+        c = compile1(file,lan)
+        if c == 400:
+            compilerError = True
+        if c == 404:
+            fof = True
+        if c ==200:
+            tin = datetime.datetime.now()
+            r = run('sub',testin,timeout,lang)  
+            tout = datetime.datetime.now()
+            tt = (tout-tin)
+            if maxtt < float(tt.total_seconds()):
+                maxtt = float(tt.total_seconds())
+            tt = str(tt)
+            if r == 408:
+                runTimeError = True
+            if r == 404:
+                fof = True
+
+            m.append([match(testout),tt])
+
+    x = 1
     for i in m:
-        if m is False:
-            x = False
+        if i[0] is False:
+            x = 0
+
+    if compilerError:
+        x = 400
+    if runTimeError:
+        x = 408
+    if fnf:
+        x = 404
+
     fil = "sub."+lan
-
     s = 0
-    if x is True:
+    if x == 1:
         s = 100
-
-    cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code) \
-        values (%s,0.2,%s,%s,%s,%s,%s)",([TimeL],[lan],[s],[Qid],[request.user.id],[fil]))
+    maxtt = str(maxtt)
+    v = str(x) 
+    cursor.execute("Insert into avs_submission (time_taken,time_limit,language,score,Qid_id,Uid_id,Code,verdict) \
+        values (%s,%s,%s,%s,%s,%s,%s,%s)",([maxtt],[TimeL],[lan],[s],[Qid],[request.user.id],[fname],[v]))
     cursor.execute("Select score from avs_userprofile where id = %s",[request.user.id])
     e = cursor.fetchall()
     d = str(int(s) + int(e[0][0]))
@@ -106,10 +179,7 @@ def compile(request, Qid, lan):
         cursor.execute("update avs_userprofile set score = %s where id = %s",([d],[request.user.id]))
         cursor.execute("insert into avs_solved (questions_id,users_id)\
          values (%s,%s)",([Qid],[request.user.id]))
-    return render(request, 'avs/compile.html',{'verdict':m , 'answer':x,'count':count})
-
-
-
+    return render(request, 'avs/compile.html',{'verdict':m , 'answer':codes[x]})
 
 def QuestionSolve(request, Qid):
     question = get_object_or_404(Questions, pk=Qid)
@@ -128,38 +198,21 @@ def QuestionSolve(request, Qid):
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
             lan = form.cleaned_data['Language']
-            if (lan != 'cpp') and (lan != 'java') and (lan != 'c'):
-                form.errors['invalid_language'] = 'Please enter a valid language extension!'
-                return render(request, 'avs/questionSolve.html',{'list':X,'form':form})            
-
-            filename = request.FILES['Code'].name
-
-            if lan == 'java':
-                if filename[-4:] != 'java':
-                    form.errors['match_error'] = 'File extension does not match with the language extension!'
-                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
-
-            if lan == 'cpp':
-                if filename[-3:] != 'cpp':
-                    form.errors['match_error'] = 'File extension does not match with the language extension!'
-                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
-
-            if lan == 'c':
-                if filename[-1:] != 'c':
-                    form.errors['match_error'] = 'File extension does not match with the language extension!'
-                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
-
-            handle_uploaded_file(request.FILES['Code'],lan)
-
-            return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/')
+            fname = handle_uploaded_file(request.FILES['Code'],lan,request.user.id)
+            return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/' + fname +'/')
     else:
         form = UploadFileForm()
     return render(request, 'avs/questionSolve.html',{'list':X,'form':form})
 
-def handle_uploaded_file(f,lan):
+def handle_uploaded_file(f,lan,userid):
     with open('sub.'+lan,'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+    fname = str(userid) + ''.join(e for e in str(datetime.datetime.now()) if e.isalnum())
+    with open(fname+'.'+lan,'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk) 
+    return fname+'.'+lan
 
 def login_user(request):
     if request.method == "POST":

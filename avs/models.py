@@ -41,13 +41,14 @@ class Testcase(models.Model):
 	Qid = models.ForeignKey(Questions)
 
 class Submission(models.Model):
-	time_taken = models.IntegerField()
+	time_taken = models.CharField(max_length=10)
 	time_limit = models.IntegerField()
 	language = models.CharField(max_length=5)
 	score = models.CharField(max_length=25, blank=True)
 	Qid = models.ForeignKey(Questions)
 	Uid = models.ForeignKey(UserProfile)
 	Code = models.FileField()
+	verdict = models.CharField(max_length=10)
 
 class Ins(models.Model):
 	questions = models.ForeignKey(Questions)

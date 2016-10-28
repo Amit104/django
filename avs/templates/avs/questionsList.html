@@ -75,7 +75,12 @@
           <div class="col-sm-4"><h4 style='color:#022A65' align="center">MEMORY LIMIT: {{ x.4 }}</h4></div>
           <div class="col-sm-4"><h4 style='color:#022A65' align="center" >TIME LIMIT: {{ x.3 }}</h4></div>
         </div>
-          <h5 style='color:green' align="right">STATUS: Completed</h5></font>
+        {% if x.0 in solved %}
+            <h5 style='color:green' align="right">STATUS: Completed</h5>
+        <{% else %}
+            <h5 style='color:red' align="right">STATUS: Not Completed</h5>
+        {% endif %}
+          </font>
 </div>
 {% endfor %}
     <!---<div class="table-responsive-vertical shadow-z-1">

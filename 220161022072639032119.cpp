@@ -20,8 +20,7 @@ int main()
             r += (1LL * b[i] * (b[i] - 1));
     r >>= 1LL;
 
-    printf("%lld\n", r);
-    while(1){}
+    printf("%lld\n", r+2);
     return 0;
     
 }
