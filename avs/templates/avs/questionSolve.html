@@ -68,6 +68,18 @@ body {
 		    </div>
 		</nav>
 
+		
+		<br>
+		<br>
+		<div>
+		 {% if form.errors %}
+            	<div class="alert alert-danger">
+            		<h4> <center> Please enter a valid language extension! </center> </h4>
+                	<strong>{{ error|escape }}</strong>
+            	</div>	
+			{% endif %}
+		</div>
+
 		<div class = "container">
 			{% for x in list %}
 			{% for i in x %}

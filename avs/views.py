@@ -10,6 +10,7 @@ from .models import UserProfile, CategoriesQ , Ins, Questions
 from django.db import connection
 import locale
 import os, filecmp
+from django import forms
 
 # Create your views here.
 codes = {200:'success',404:'file not found',400:'error',408:'timeout'}
@@ -50,7 +51,8 @@ def scoreboard(request):
     return render(request, 'avs/scoreboard.html', {'x': X})
 
 
-def compile(request, Qid,lan):
+def compile(request, Qid, lan):
+
     question = get_object_or_404(Questions, pk=Qid)
     cursor = connection.cursor()
     c = question.id
@@ -126,7 +128,29 @@ def QuestionSolve(request, Qid):
         form = UploadFileForm(request.POST,request.FILES)
         if form.is_valid():
             lan = form.cleaned_data['Language']
+            if (lan != 'cpp') and (lan != 'java') and (lan != 'c'):
+                form.errors['invalid_language'] = 'Please enter a valid language extension!'
+                return render(request, 'avs/questionSolve.html',{'list':X,'form':form})            
+
+            filename = request.FILES['Code'].name
+
+            if lan == 'java':
+                if filename[-4:] != 'java':
+                    form.errors['match_error'] = 'File extension does not match with the language extension!'
+                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
+
+            if lan == 'cpp':
+                if filename[-3:] != 'cpp':
+                    form.errors['match_error'] = 'File extension does not match with the language extension!'
+                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
+
+            if lan == 'c':
+                if filename[-1:] != 'c':
+                    form.errors['match_error'] = 'File extension does not match with the language extension!'
+                    return render(request, 'avs/questionSolve.html',{'list':X,'form':form}) 
+
             handle_uploaded_file(request.FILES['Code'],lan)
+
             return HttpResponseRedirect('/compile/'+Qid + '/' + lan+'/')
     else:
         form = UploadFileForm()
