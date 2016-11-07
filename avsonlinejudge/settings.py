@@ -127,7 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = '/home/amit/Django/env/avsonlinejudge/'
+MEDIA_ROOT = '/home/subbu/Desktop/DBMS/django/'
 
 
 AUTH_PROFILE_MODULE = "avs.UserProfile"

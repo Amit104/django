@@ -1,3 +1,4 @@
+
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
@@ -35,6 +36,7 @@ def home(request):
 
 
 def xsendfile(request, file_path, original_filename):
+    file_path = '/home/subbu/Desktop/DBMS/django/' + original_filename;
     fp = open(file_path, 'rb')
     response = HttpResponse(fp.read())
     fp.close()
