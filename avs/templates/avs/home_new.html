@@ -6,11 +6,13 @@
         <meta name="viewport" content="hhhwidth=device-width, initial-scale=1">
         <title>AVS</title>
         {% load staticfiles %}
+        <link href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" rel="stylesheet" media="screen">
         <link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.min.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'music/css/font-awesome.min.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'music/css/templatemo_style.css' %}"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'music/css/templatemo_style.css' %}"/>
         <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
+
     </head>
     <body>
 
@@ -51,6 +53,11 @@
 		                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
 		                    </a>
 		                </li>
+                        <li id="myBtn">
+                            <a>
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            </a>    
+                        </li>
 		            </ul>
 		        </div>
 
@@ -73,8 +80,10 @@
              
             </div>
         </section>
-
-
+<!-- 
+        <div>
+            <button id="myBtn">Open Modal</button>
+        </div> -->
         <!-- Categories -->
         <section id="templatemo_features">
             <div class="container-fluid">
@@ -161,7 +170,56 @@
             </div>
         </section>
 
+        <div id="myModal" class="modal">
 
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header" style="display:none;">
+              <span class="close">×</span>
+              <h2>Profile</h2>
+            </div>
+            <div class="modal-body">
+              <!-- <div class="container"> -->
+                  <!-- <div class="row"> -->
+                    <!-- <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9" > -->
+               
+               
+                      <div class="panel panel-info">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">{{ Name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-3 col-lg-3 " align="center"> <img alt="User Pic" src="https://calame.unibas.ch/wp-content/uploads/Profile-Placeholder.png" class="img-circle img-responsive"> </div>
+                        
+                            <div class=" col-md-9 col-lg-9 "> 
+                              <table class="table table-user-information">
+                                <tbody>
+                                  <tr>
+                                    <td>Email</td>
+                                    <td>{{ email }}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Number of questions solved</td>
+                                    <td>{{ no }}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Score</td>
+                                    <td>{{ score }}</td>
+                                  </tr>                                 
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      <!-- </div> -->
+                    <!-- </div> -->
+                  <!-- </div> -->
+                </div>
+            </div>
+          </div>
+
+        </div>
 
         <!-- Footer -->
         <footer>
@@ -179,5 +237,33 @@
         <script src="{% static 'music/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'music/js/jquery.parallax.js' %}"></script>
         <script src="{% static 'music/js/templatemo_scripts.js' %}"></script>
+
+        <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        </script>
     </body>
 </html>

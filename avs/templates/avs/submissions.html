@@ -38,6 +38,11 @@
         
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                        <a href="{% url 'avs:submissions' %}">
+                            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>&nbsp; Submissions
+                        </a>
+                    </li>
+                    <li>
                         <a href="{% url 'avs:scoreboard' %}">
                             <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>&nbsp; Scoreboard
                         </a>
@@ -52,6 +57,7 @@
 
         </div>
     </nav>
+
     <section style = 'margin-top:80px'> <!--for demo wrap-->
       <h1 style='font-weight:500'>Submissions</h1>  
       <div class="tbl-header">

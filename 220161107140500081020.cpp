@@ -20,7 +20,7 @@ int main()
             r += (1LL * b[i] * (b[i] - 1));
     r >>= 1LL;
 
-    printf("%lld\n", r);
+    printf("%lld\n", r)
     return 0;
     
 }

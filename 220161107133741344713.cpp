@@ -21,6 +21,7 @@ int main()
     r >>= 1LL;
 
     printf("%lld\n", r);
+    //blah
     return 0;
     
 }
